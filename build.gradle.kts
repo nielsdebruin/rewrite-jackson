@@ -17,6 +17,10 @@ dependencies {
         exclude("com.google.auto.service", "auto-service-annotations")
     }
 
+    testImplementation("com.fasterxml.jackson.core:jackson-databind:latest.release")
+    testImplementation("org.codehaus.jackson:jackson-core-asl:latest.release")
+    testImplementation("org.codehaus.jackson:jackson-mapper-asl:latest.release")
+
     testImplementation("org.openrewrite:rewrite-java-17")
     testImplementation("org.openrewrite:rewrite-test")
     testImplementation("org.openrewrite:rewrite-maven")

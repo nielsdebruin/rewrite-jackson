@@ -17,6 +17,6 @@
 ---
 type: specs.openrewrite.org/v1beta/category
 name: Jackson
-packageName: org.openrewrite.jackson
+packageName: org.openrewrite.java.jackson
 description: Recipes to perform [Jackson](https://fasterxml.com/) migration tasks.
 ---
