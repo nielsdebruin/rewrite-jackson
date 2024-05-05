@@ -17,6 +17,7 @@ package org.openrewrite.java.jackson;
 
 import org.junit.jupiter.api.Test;
 import org.openrewrite.config.Environment;
+import org.openrewrite.java.ChangeType;
 import org.openrewrite.java.JavaParser;
 import org.openrewrite.test.RecipeSpec;
 import org.openrewrite.test.RewriteTest;
@@ -34,14 +35,17 @@ public class CodehausToFasterXMLTest implements RewriteTest {
     }
 
     @Test
-    void jsonInclude() {
+    void onlyJsonSerializeInclusion() {
         rewriteRun(
+          spec -> spec.recipe(new ChangeType("org.codehaus.jackson.map.annotate.JsonSerialize$Inclusion",
+            "com.fasterxml.jackson.annotation.JsonInclude$Include",
+            false)),
           //language=java
           java(
             """
               import org.codehaus.jackson.map.ObjectMapper;
               import org.codehaus.jackson.map.annotate.JsonSerialize;
-              
+                            
               public class Test {
                   private static ObjectMapper initializeObjectMapper() {
                       ObjectMapper mapper = new ObjectMapper();
@@ -50,9 +54,10 @@ public class CodehausToFasterXMLTest implements RewriteTest {
               }
               """,
             """
+              import com.fasterxml.jackson.annotation.JsonInclude;
               import com.fasterxml.jackson.annotation.JsonInclude.Include;
-              import com.fasterxml.jackson.databind.ObjectMapper;
-              
+              import org.codehaus.jackson.map.ObjectMapper;
+                            
               public class Test {
                   private static ObjectMapper initializeObjectMapper() {
                       ObjectMapper mapper = new ObjectMapper();
