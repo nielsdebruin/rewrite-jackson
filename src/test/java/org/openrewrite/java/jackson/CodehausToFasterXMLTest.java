@@ -16,37 +16,31 @@
 package org.openrewrite.java.jackson;
 
 import org.junit.jupiter.api.Test;
-import org.openrewrite.config.Environment;
-import org.openrewrite.java.ChangeType;
 import org.openrewrite.java.JavaParser;
 import org.openrewrite.test.RecipeSpec;
 import org.openrewrite.test.RewriteTest;
 
 import static org.openrewrite.java.Assertions.java;
 
-public class CodehausToFasterXMLTest implements RewriteTest {
+class CodehausToFasterXMLTest implements RewriteTest {
 
     @Override
     public void defaults(RecipeSpec spec) {
         spec
-          .recipe(Environment.builder().scanYamlResources().build()
-            .activateRecipes("org.openrewrite.java.jackson.CodehausToFasterXML"))
+          .recipeFromResources("org.openrewrite.java.jackson.CodehausToFasterXML")
           .parser(JavaParser.fromJavaVersion().classpath(JavaParser.runtimeClasspath()));
     }
 
     @Test
     void onlyJsonSerializeInclusion() {
         rewriteRun(
-          spec -> spec.recipe(new ChangeType("org.codehaus.jackson.map.annotate.JsonSerialize$Inclusion",
-            "com.fasterxml.jackson.annotation.JsonInclude$Include",
-            false)),
           //language=java
           java(
             """
               import org.codehaus.jackson.map.ObjectMapper;
               import org.codehaus.jackson.map.annotate.JsonSerialize;
-                            
-              public class Test {
+              
+              class Test {
                   private static ObjectMapper initializeObjectMapper() {
                       ObjectMapper mapper = new ObjectMapper();
                       return mapper.setSerializationInclusion(JsonSerialize.Inclusion.NON_NULL);
@@ -56,9 +50,9 @@ public class CodehausToFasterXMLTest implements RewriteTest {
             """
               import com.fasterxml.jackson.annotation.JsonInclude;
               import com.fasterxml.jackson.annotation.JsonInclude.Include;
-              import org.codehaus.jackson.map.ObjectMapper;
-                            
-              public class Test {
+              import com.fasterxml.jackson.databind.ObjectMapper;
+              
+              class Test {
                   private static ObjectMapper initializeObjectMapper() {
                       ObjectMapper mapper = new ObjectMapper();
                       return mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
