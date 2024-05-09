@@ -10,7 +10,7 @@
 
 This project implements a [Rewrite module](https://github.com/openrewrite/rewrite) that performs common tasks for Jackson.
 
-Browse [a selection of recipes available through this module in the recipe catalog](https://docs.openrewrite.org/recipes/jackson).
+Browse [a selection of recipes available through this module in the recipe catalog](https://docs.openrewrite.org/recipes/java/jackson).
 
 ## Contributing
 
