@@ -69,7 +69,7 @@ public class JsonIncludeAnnotation extends Recipe {
             if (includeArgument.get() != null) {
                 cd = JavaTemplate.builder("@JsonInclude(value = JsonInclude.Include." + includeArgument.get() + ")")
                         .imports(COM_FASTERXML_JACKSON_ANNOTATION_JSON_INCLUDE)
-                        .javaParser(JavaParser.fromJavaVersion().classpath("jackson-annotations"))
+                        .javaParser(JavaParser.fromJavaVersion().classpathFromResources(ctx, "jackson-annotations"))
                         .build()
                         .apply(updateCursor(cd), cd.getCoordinates().addAnnotation(Comparator.comparing(J.Annotation::getSimpleName)));
                 maybeAddImport(COM_FASTERXML_JACKSON_ANNOTATION_JSON_INCLUDE);
@@ -91,7 +91,7 @@ public class JsonIncludeAnnotation extends Recipe {
             if (includeArgument.get() != null) {
                 md = JavaTemplate.builder("@JsonInclude(value = JsonInclude.Include." + includeArgument.get() + ")")
                         .imports(COM_FASTERXML_JACKSON_ANNOTATION_JSON_INCLUDE)
-                        .javaParser(JavaParser.fromJavaVersion().classpath("jackson-annotations"))
+                        .javaParser(JavaParser.fromJavaVersion().classpathFromResources(ctx, "jackson-annotations"))
                         .build()
                         .apply(updateCursor(md), md.getCoordinates().addAnnotation(Comparator.comparing(J.Annotation::getSimpleName)));
                 maybeAddImport(COM_FASTERXML_JACKSON_ANNOTATION_JSON_INCLUDE);
@@ -113,7 +113,7 @@ public class JsonIncludeAnnotation extends Recipe {
             if (includeArgument.get() != null) {
                 vd = JavaTemplate.builder("@JsonInclude(value = JsonInclude.Include." + includeArgument.get() + ")")
                         .imports(COM_FASTERXML_JACKSON_ANNOTATION_JSON_INCLUDE)
-                        .javaParser(JavaParser.fromJavaVersion().classpath("jackson-annotations"))
+                        .javaParser(JavaParser.fromJavaVersion().classpathFromResources(ctx, "jackson-annotations"))
                         .build()
                         .apply(updateCursor(vd), vd.getCoordinates().addAnnotation(Comparator.comparing(J.Annotation::getSimpleName)));
                 maybeAddImport(COM_FASTERXML_JACKSON_ANNOTATION_JSON_INCLUDE);
