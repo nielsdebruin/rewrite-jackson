@@ -36,6 +36,13 @@ recipeList:
       oldFullyQualifiedTypeName: org.codehaus.jackson.map.ObjectMapper
       newFullyQualifiedTypeName: com.fasterxml.jackson.databind.ObjectMapper
 
+  - org.openrewrite.java.ChangeType:
+      oldFullyQualifiedTypeName: org.codehaus.jackson.map.SerializationConfig$Feature
+      newFullyQualifiedTypeName: com.fasterxml.jackson.databind.SerializationFeature
+  - org.openrewrite.java.ChangeType:
+      oldFullyQualifiedTypeName: org.codehaus.jackson.map.DeserializationConfig$Feature
+      newFullyQualifiedTypeName: com.fasterxml.jackson.databind.DeserializationFeature
+
   - org.openrewrite.java.dependencies.ChangeDependency:
       oldGroupId: org.codehaus.jackson
       oldArtifactId: jackson-mapper-asl
