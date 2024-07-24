@@ -18,7 +18,7 @@
 type: specs.openrewrite.org/v1beta/recipe
 name: org.openrewrite.java.jackson.CodehausToFasterXML
 displayName: Migrate from Jackson Codehaus (legacy) to Jackson FasterXML
-description: >
+description: >-
   In Jackson 2, the package and dependency coordinates moved from Codehaus to FasterXML.
 recipeList:
   - org.openrewrite.java.jackson.CodehausClassesToFasterXML
@@ -29,7 +29,7 @@ recipeList:
 type: specs.openrewrite.org/v1beta/recipe
 name: org.openrewrite.java.jackson.CodehausClassesToFasterXML
 displayName: Migrate classes from Jackson Codehaus (legacy) to Jackson FasterXML
-description: >
+description: >-
   In Jackson 2, the package and dependency coordinates moved from Codehaus to FasterXML.
 recipeList:
   - org.openrewrite.java.jackson.codehaus.JsonIncludeAnnotation
