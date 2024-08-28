@@ -16,9 +16,9 @@
 package org.openrewrite.java.jackson.codehaus;
 
 import lombok.Value;
+import org.jspecify.annotations.Nullable;
 import org.openrewrite.Option;
 import org.openrewrite.Recipe;
-import org.openrewrite.internal.lang.Nullable;
 import org.openrewrite.java.dependencies.AddDependency;
 import org.openrewrite.java.dependencies.ChangeDependency;
 
