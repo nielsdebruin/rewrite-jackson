@@ -123,8 +123,7 @@ public class JsonIncludeAnnotation extends Recipe {
 
         private final AnnotationMatcher annotationMatcher = new AnnotationMatcher("@" + ORG_CODEHAUS_JACKSON_MAP_ANNOTATE_JSON_SERIALIZE, false);
 
-        @Nullable
-        private J.Annotation mapAnnotation(J.Annotation ann, AtomicReference<String> includeArgument) {
+        private J.@Nullable Annotation mapAnnotation(J.Annotation ann, AtomicReference<String> includeArgument) {
             if (!annotationMatcher.matches(ann)) {
                 return ann;
             }
