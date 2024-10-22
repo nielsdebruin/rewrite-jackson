@@ -20,14 +20,18 @@ import org.openrewrite.ExecutionContext;
 import org.openrewrite.Preconditions;
 import org.openrewrite.Recipe;
 import org.openrewrite.TreeVisitor;
-import org.openrewrite.java.AnnotationMatcher;
-import org.openrewrite.java.JavaVisitor;
-import org.openrewrite.java.RemoveAnnotationVisitor;
-import org.openrewrite.java.ShortenFullyQualifiedTypeReferences;
+import org.openrewrite.java.*;
 import org.openrewrite.java.search.UsesType;
+import org.openrewrite.java.service.AnnotationService;
 import org.openrewrite.java.tree.J;
 
+import java.util.HashSet;
+import java.util.Set;
+
 public class RemoveDoublyAnnotatedCodehausAnnotations extends Recipe {
+
+    private static final AnnotationMatcher MATCHER_FASTERXML = new AnnotationMatcher("@com.fasterxml.jackson.databind.annotation.JsonSerialize", true);
+    private static final AnnotationMatcher MATCHER_CODEHAUS = new AnnotationMatcher("@org.codehaus.jackson.map.annotate.JsonSerialize", true);
 
     @Override
     public String getDisplayName() {
@@ -42,15 +46,23 @@ public class RemoveDoublyAnnotatedCodehausAnnotations extends Recipe {
     @Override
     public TreeVisitor<?, ExecutionContext> getVisitor() {
         return Preconditions.check(
-                Preconditions.or(
-                        new UsesType<>("com.fasterxml.jackson.annotation.JsonInclude", false),
-                        new UsesType<>("com.fasterxml.jackson.databind.annotation.JsonSerialize", false)
-                ),
+                new UsesType<>("com.fasterxml.jackson.databind.annotation.JsonSerialize", false),
                 new JavaVisitor<ExecutionContext>() {
                     @Override
                     public J preVisit(@NonNull J tree, ExecutionContext ctx) {
                         stopAfterPreVisit();
-                        doAfterVisit(new RemoveAnnotationVisitor(new AnnotationMatcher("@org.codehaus.jackson.map.annotate.JsonSerialize", true)));
+
+                        Set<J.Annotation> annotationsToRemove = new FindDoublyAnnotatedVisitor().reduce(tree, new HashSet<>());
+                        AnnotationMatcher matcher = new AnnotationMatcher(
+                                // ignored in practice, as we only match annotations previously found just above
+                                "@org.codehaus.jackson.map.annotate.JsonSerialize", true) {
+                            @Override
+                            public boolean matches(J.Annotation annotation) {
+                                return annotationsToRemove.contains(annotation);
+                            }
+                        };
+
+                        doAfterVisit(new RemoveAnnotationVisitor(matcher));
                         maybeRemoveImport("org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion.*");
                         maybeRemoveImport("org.codehaus.jackson.map.annotate.JsonSerialize.Typing.*");
                         doAfterVisit(new ShortenFullyQualifiedTypeReferences().getVisitor());
@@ -58,4 +70,16 @@ public class RemoveDoublyAnnotatedCodehausAnnotations extends Recipe {
                     }
                 });
     }
+
+    private static class FindDoublyAnnotatedVisitor extends JavaIsoVisitor<Set<J.Annotation>> {
+        @Override
+        public J.Annotation visitAnnotation(J.Annotation annotation, Set<J.Annotation> doublyAnnotated) {
+            J.Annotation a = super.visitAnnotation(annotation, doublyAnnotated);
+            if (MATCHER_CODEHAUS.matches(annotation) && service(AnnotationService.class).matches(getCursor().getParentOrThrow(), MATCHER_FASTERXML)) {
+                doublyAnnotated.add(annotation);
+            }
+            return a;
+        }
+    }
+
 }
