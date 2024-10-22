@@ -15,6 +15,7 @@
  */
 package org.openrewrite.java.jackson.codehaus;
 
+import lombok.EqualsAndHashCode;
 import lombok.Value;
 import org.jspecify.annotations.Nullable;
 import org.openrewrite.Option;
@@ -26,6 +27,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Value
+@EqualsAndHashCode(callSuper = false)
 public class CodehausDependencyToFasterXML extends Recipe {
 
     @Option(displayName = "Codehaus Jackson version",
